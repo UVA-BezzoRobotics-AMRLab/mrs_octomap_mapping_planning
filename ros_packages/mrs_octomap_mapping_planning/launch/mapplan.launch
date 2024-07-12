@@ -5,7 +5,7 @@
   <arg name="LOGGER_DEBUG" default="$(optenv LOGGER_DEBUG false)" />
 
     <!-- other args -->
-  <arg name="standalone" default="false" />
+  <arg name="standalone" default="true" />
   <arg name="debug" default="false" />
   <arg name="nodelet_manager_name" default="$(arg UAV_NAME)_mapping_nodelet_manager" />
   <arg name="world_frame_id" default="$(arg UAV_NAME)/world_origin" />
@@ -48,10 +48,10 @@
 
   <!-- Realsense FRONT to PC //{ -->
 
-  <include file="$(find mrs_octomap_mapping_planning)/launch/depth_to_pc.launch">
+  <!-- <include file="$(find mrs_octomap_mapping_planning)/launch/depth_to_pc.launch"> -->
 
     <!-- <arg name="standalone" value="true" /> -->
-    <arg name="standalone" value="$(arg standalone)" />
+    <!-- <arg name="standalone" value="$(arg standalone)" />
     <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)" />
     <arg name="name_suffix" value="_realsense_front" />
 
@@ -59,16 +59,16 @@
     <arg name="image_rect_topic_in" value="front_rgbd/aligned_depth_to_color/image_raw" />
     <arg name="pc_topic_out" value="front_rgbd/points" />
 
-  </include>
+  </include> -->
 
   <!-- //} -->
 
   <!-- Realsense DOWN to PC //{ -->
 
-  <include file="$(find mrs_octomap_mapping_planning)/launch/depth_to_pc.launch">
+  <!-- <include file="$(find mrs_octomap_mapping_planning)/launch/depth_to_pc.launch"> -->
 
     <!-- <arg name="standalone" value="true" /> -->
-    <arg name="standalone" value="$(arg standalone)" />
+    <!-- <arg name="standalone" value="$(arg standalone)" />
     <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)" />
     <arg name="name_suffix" value="_realsense_down" />
 
@@ -76,39 +76,39 @@
     <arg name="image_rect_topic_in" value="down_rgbd/aligned_depth_to_color/image_raw" />
     <arg name="pc_topic_out" value="down_rgbd/points" />
 
-  </include>
+  </include> -->
 
   <!-- //} -->
 
   <!-- Realsense Front filter //{ -->
 
-  <include file="$(find mrs_pcl_tools)/launch/pcl_filter.launch">
+  <!-- <include file="$(find mrs_pcl_tools)/launch/pcl_filter.launch"> -->
 
     <!-- <arg name="standalone" value="true" /> -->
-    <arg name="standalone" value="$(arg standalone)" />
+    <!-- <arg name="standalone" value="$(arg standalone)" />
     <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)" />
     <arg name="custom_config" value="$(arg config_pcl_filter_rs_front)" />
     <arg name="debug" value="false" />
     <arg name="name_suffix" value="rs_front" />
     <arg name="topic_3d_lidar_in" value="front_rgbd/points" />
 
-  </include>
+  </include> -->
 
   <!-- //} -->
 
   <!-- Realsense down filter //{ -->
 
-  <include file="$(find mrs_pcl_tools)/launch/pcl_filter.launch">
+  <!-- <include file="$(find mrs_pcl_tools)/launch/pcl_filter.launch"> -->
 
     <!-- <arg name="standalone" value="true" /> -->
-    <arg name="standalone" value="$(arg standalone)" />
+    <!-- <arg name="standalone" value="$(arg standalone)" />
     <arg name="nodelet_manager_name" value="$(arg nodelet_manager_name)" />
     <arg name="custom_config" value="$(arg config_pcl_filter_rs_down)" />
     <arg name="debug" value="false" />
     <arg name="name_suffix" value="rs_down" />
     <arg name="topic_3d_lidar_in" value="down_rgbd/points" />
 
-  </include>
+  </include> -->
 
   <!-- //} -->
 
@@ -122,13 +122,13 @@
     <arg name="debug" value="false" />
     <arg name="lidar_3d_topic_0_in" value="pcl_filter_ouster/points_processed" />
     <arg name="lidar_3d_topic_0_over_max_range_in" value="pcl_filter_ouster/points_over_max_range" />
-    <arg name="depth_camera_topic_0_in" value="pcl_filter_rs_front/points_processed" />
+    <!-- <arg name="depth_camera_topic_0_in" value="pcl_filter_rs_front/points_processed" />
     <arg name="depth_camera_topic_0_over_max_range_in" default="pcl_filter_rs_front/points_over_max_range" />
     <arg name="depth_camera_topic_1_in" value="pcl_filter_rs_down/points_processed" />
     <arg name="depth_camera_topic_1_over_max_range_in" default="pcl_filter_rs_down/points_over_max_range" />
     <arg name="camera_info_topic_0_in" default="front_rgbd/aligned_depth_to_color/camera_info" />
     <arg name="camera_info_topic_1_in" default="down_rgbd/aligned_depth_to_color/camera_info" />
-    <arg name="lidar_2d_topic_0_in" value="rplidar/scan" />
+    <arg name="lidar_2d_topic_0_in" value="rplidar/scan" /> -->
     <arg name="world_frame_id" value="$(arg world_frame_id)" />
 
   </include>
