@@ -15,17 +15,16 @@ windows:
   - gazebo:
       layout: tiled
       panes:
-        - waitForRos; roslaunch mrs_uav_gazebo_simulation simulation.launch world_name:=forest gui:=true
+        - waitForRos; roslaunch mrs_uav_gazebo_simulation simulation.launch world_name:=laurens_worldv2 gui:=false
         - waitForControl; gz camera -c gzclient_camera -f $UAV_NAME; history -s gz camera -c gzclient_camera -f $UAV_NAME
-  - status:
+  - status: 
       layout: tiled
       panes:
         - waitForHw; roslaunch mrs_uav_status status.launch
   - spawn:
       layout: tiled
       panes:
-        # - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 $UAV_TYPE --enable-rangefinder --enable-ouster --ouster-model OS0-128 --use-gpu-ray --enable-realsense-front --enable-realsense-down --pos 0 0 1.0 0"
-        - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 $UAV_TYPE --enable-rangefinder --enable-ouster --ouster-model OS0-128 --use-gpu-ray --pos 0 0 1.0 0"
+        - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 $UAV_TYPE --pos 0 0 1 0 --enable-amr-sensors --enable-ouster model:=OS0-16 use_gpu:=True horizontal_samples:=1024" 
   - hw_api:
       layout: tiled
       panes:
@@ -38,6 +37,10 @@ windows:
           custom_config:=./config/custom_config.yaml
           world_config:=./config/world_config.yaml
           network_config:=./config/network_config.yaml
+  - slam:
+      layout: tiled
+      panes:
+        - waitForHw; roslaunch mrs_aloam_core slam_pipeline.launch
   - mapplan:
       layout: tiled
       panes:
@@ -45,13 +48,17 @@ windows:
           config_octomap_server:=./config/octomap_server.yaml
           config_octomap_planner:=./config/octomap_planner.yaml
           config_pcl_filter_ouster:=./config/ouster_filter_mapping.yaml
-          config_pcl_filter_rs_front:=./config/rs_front_filter.yaml
-          config_pcl_filter_rs_down:=./config/rs_down_filter.yaml
+          # config_pcl_filter_rs_front:=./config/rs_front_filter.yaml
+          # config_pcl_filter_rs_down:=./config/rs_down_filter.yaml
+  - waypoint_planner:
+      layout: tiled
+      panes: 
+         - 'history -s roslaunch mrs_octomap_mapping_planning ps_octomap.launch'
   - takeoff:
       layout: tiled
       panes:
         - waitForHw; roslaunch mrs_uav_autostart automatic_start.launch
-        - 'waitForControl; rosservice call /$UAV_NAME/hw_api/arming 1; sleep 2; rosservice call /$UAV_NAME/hw_api/offboard'
+        - 'waitForControl; sleep 2; rosservice call /$UAV_NAME/hw_api/arming 1; sleep 2; rosservice call /$UAV_NAME/hw_api/offboard'
   - goto:
       layout: tiled
       panes:

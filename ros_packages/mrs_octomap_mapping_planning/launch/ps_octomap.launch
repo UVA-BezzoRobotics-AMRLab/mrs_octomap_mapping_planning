@@ -1,0 +1,30 @@
+<launch>
+  <!-- args corresponding to environment variables -->
+
+  <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 /uav1/world_origin /world 100" /> -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="world_origin_to_world" args="0 0 0 0 0 0 /uav1/ground_truth_origin /uav1/world_origin 100" /> -->
+  
+  <arg name="UAV_NAME" default="$(env UAV_NAME)" />
+  <arg name="target_topic" default="/$(arg UAV_NAME)/octomap_planner/goal_pose_reference" />
+
+  <node pkg="mrs_octomap_mapping_planning" type="octomap_ray_casting" name="octomap_ray_casting" output="screen">
+    <param name="~octomap_topic" value="/$(arg UAV_NAME)/octomap_server/octomap_global_full"/>
+    <param name="~pose_topic" value = "/$(arg UAV_NAME)/estimation_manager/odom_main"/>
+    <param name="~target_topic" value = "$(arg target_topic)"/>
+    <param name="~world_frame_id" value = "$(arg UAV_NAME)/stable_origin"/>
+    <param name="~angle_offset" value="-3.14"/>
+    <param name="~target_width" value="12"/>
+    <param name="~target_height" value="6"/>
+    <param name="~target_start_in_y" value="6.0"/> <!--left side of target-->
+    <param name="~target_start_in_x" value="8.5"/> <!--target can only sit on x plane for now-->
+    <param name="~target_resolution" value="1.0"/>
+    <param name="~field_of_view" value="1.57"/>
+    <param name="~ray_length" value="7.0"/>
+  </node>
+
+  <node pkg="mrs_octomap_mapping_planning" type="goal_service_call" name="goal_service_call" output="screen">
+    <param name="~goal_service" value="/$(arg UAV_NAME)/octomap_planner/goto"/>
+    <param name="~goal_topic" value = "$(arg target_topic)"/>
+    <param name="~distance_threshold" value="0.5"/>
+ </node>
+</launch>
