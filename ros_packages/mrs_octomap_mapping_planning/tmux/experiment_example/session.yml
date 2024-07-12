@@ -1,0 +1,76 @@
+# do not modify these
+root: ./
+name: mav
+socket_name: mrs
+attach: false
+tmux_options: -f /etc/ctu-mrs/tmux.conf
+# you can modify these
+pre_window: export UAV_NAME=uav1; export RUN_TYPE=mav; export UAV_TYPE=x500
+startup_window: core
+windows:
+  - core:
+      layout: tiled
+      panes:
+        - waitForTime; roslaunch mrs_uav_core core.launch platform_config:=`rospack find mrs_uav_deployment`/config/mrs_uav_system/$UAV_TYPE.yaml world_config:=`rospack find mrs_uav_deployment`/config/worlds/world_$WORLD_NAME.yaml custom_config:= `rospack find mrs_aloam_estimator_plugin`/custom_configs/mrs_uav_managers.yaml network_config:=./config/network_config.yaml
+  - sensors:
+      layout: tiled
+      panes:
+        - waitForTime; roslaunch mrs_uav_deployment sensors.launch
+        - waitForTime; roslaunch mrs_uav_deployment oak_front.launch
+        - waitForTime; roslaunch mrs_uav_deployment oak_down.launch
+        - waitForTime; roslaunch ouster_ros uav.launch
+  - nimbro:
+      layout: tiled
+      panes:
+        - waitForTime; rosrun mrs_uav_deployment run_nimbro.py ./config/network_config.yaml `rospack find mrs_uav_deployment`/config/communication_config.yaml
+  - hw_api:
+      layout: tiled
+      panes:
+        # - waitForGazebo; rosservice call /mrs_drone_spawner/spawn "1 $UAV_TYPE --enable-rangefinder --enable-ouster --ouster-model OS0-128 --use-gpu-ray --enable-realsense-front --enable-realsense-down --pos 0 0 1.0 0"
+        - waitForTime; roslaunch mrs_uav_px4_api api.launch
+  - aloam:
+      layout: tiled
+      panes:
+        - waitForTime; roslaunch mrs_aloam_core slam_pipeline.launch OUSTER_TYPE:=OS0-64
+  - takeoff:
+      layout: tiled
+      panes:
+        - waitForHw; roslaunch mrs_uav_autostart automatic_start.launch
+        - 'waitForControl; rosservice call /$UAV_NAME/hw_api/arming 1; sleep 2; rosservice call /$UAV_NAME/hw_api/offboard'
+  - mapplan:
+      layout: tiled
+      panes:
+        # - waitForHw; roslaunch mrs_octomap_mapping_planning mapplan.launch
+        #   config_octomap_server:=./config/octomap_server.yaml
+        #   config_octomap_planner:=./config/octomap_planner.yaml
+        #   config_pcl_filter_ouster:=./config/ouster_filter_mapping.yaml
+          # config_pcl_filter_rs_front:=./config/rs_front_filter.yaml
+          # config_pcl_filter_rs_down:=./config/rs_down_filter.yaml
+  - led_strip_driver:
+      layout: tiled
+      panes:
+        - waitForTime; roslaunch led_strip_driver uav.launch
+  - status:
+      layout: tiled
+      panes:
+        - waitForHw; roslaunch mrs_uav_status status.launch
+  - rviz:
+      layout: tiled
+      panes:
+        - waitForControl; rosrun mrs_uav_deployment custom.rviz
+  - EstimDiag:
+      layout: tiled
+      panes:
+        - waitForHw; rostopic echo /'"$UAV_NAME"'/estimation_manager/diagnostics
+  - kernel_log:
+      layout: tiled
+      panes:
+        - tail -f /var/log/kern.log -n 100
+  - roscore:
+      layout: tiled
+      panes:
+        - roscore
+  - simtime:
+      layout: tiled
+      panes:
+        - waitForRos; rosparam set use_sim_time false
