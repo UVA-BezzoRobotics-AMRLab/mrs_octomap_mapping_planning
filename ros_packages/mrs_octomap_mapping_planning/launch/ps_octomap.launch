@@ -13,7 +13,7 @@
     <param name="~target_topic" value = "$(arg target_topic)"/>
     <param name="~world_frame_id" value = "$(arg UAV_NAME)/stable_origin"/>
     <param name="~angle_offset" value="-3.14"/>
-    <param name="~target_width" value="12.1"/>
+    <param name="~target_width" value="12"/>
     <param name="~target_height" value="6"/>
     <param name="~target_start_in_y" value="6.0"/> <!--left side of target-->
     <param name="~target_start_in_x" value="8.5"/> <!--target can only sit on x plane for now-->
