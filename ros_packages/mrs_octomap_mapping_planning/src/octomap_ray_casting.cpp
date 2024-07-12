@@ -987,18 +987,7 @@ int main(int argc, char** argv)
   nh.param<float>("target_resolution", targetRes, 0.1);
   nh.param<double>("ray_length", rayLength, 10.0);
   nh.param<double>("field_of_view", fov, 1.0);
-  std::cout << "octomap_topic: " << octomap_default << std::endl;
-  std::cout << "pose_topic: " << pose_default << std::endl;
-  std::cout << "target_topic: " << target_default << std::endl;
-  std::cout << "world_frame_id: " << world_frame_id << std::endl;
-  std::cout << "angle_offset: " << angle_offset << std::endl;
-  std::cout << "target_width: " << ytargetSize << std::endl;
-  std::cout << "target_height: " << ztargetSize << std::endl;
-  std::cout << "target_start_in_y: " << leftY << std::endl;
-  std::cout << "target_start_in_x: " << xTarget << std::endl;
-  std::cout << "target_resolution: " << targetRes << std::endl;
-  std::cout << "ray_length: " << rayLength << std::endl;
-  std::cout << "fov: " << fov << std::endl;
+
   // Subscribe to the octomap and pose topic
   ros::Subscriber octomap_sub = nh.subscribe<octomap_msgs::Octomap>(octomap_default, 10, octomapCallback);
   ros::Subscriber pose_sub = nh.subscribe<nav_msgs::Odometry>(pose_default, 1000, odomCallback);
